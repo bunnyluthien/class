@@ -1,0 +1,219 @@
+// Advanced exercises involving recursion
+
+type Nat {
+  zero
+  succ(pred: Nat)
+}
+
+// Doubles a number
+dbl(a: Nat): Nat // double
+  case a {
+    zero: Nat.zero
+    succ: Nat.succ(Nat.succ(dbl(a.pred)))
+  }
+//  ex4:_
+//  dbl(3)
+// 6
+//                    4
+//                                      2
+// Nat.succ(Nat.succ(Nat.succ(Nat.succ(Nat.succ(Nat.succ(dbl(0)))))))
+
+
+// Addition
+add(a: Nat, b: Nat): Nat
+  case a b {
+    zero zero: Nat.zero
+    zero succ: b
+    succ zero: a
+    succ succ: add(Nat.succ(a), b.pred)
+  }
+  // ex4:_
+  // add(4,3)
+
+
+// Multiplication
+mul(a: Nat, b: Nat): Nat
+  case a b {
+    succ succ: add(a, mul(a, b.pred))
+  } default Nat.zero
+//  ex4:_
+//  mul(4,3)
+// 12
+//            8
+//                  4
+
+
+// Subtraction
+// 4 - 5 = 0
+// 5 - 4 = 1
+sub(a: Nat, b: Nat): Nat
+  case a b {
+    // zero zero: Nat.zero
+    // zero succ: Nat.zero
+    succ zero: a
+    succ succ: sub(a.pred, b.pred)
+
+    // zero: Nat.zero
+    // succ: case b {
+    //     zero: a
+    //     succ: sub(a.pred, b.pred)
+    //   }
+  } default Nat.zero
+  // ex4:_
+  // sub(24,20)
+
+// Factorial
+// 4! = 24
+fac(a: Nat): Nat
+  case a {
+    zero: Nat.succ(Nat.zero)
+    succ: mul(a, fac(a.pred))
+  }
+//  ex4:_
+//  fac(1)
+// mul(4, fac(3))
+// quando fac eh chamada dnv, o 'a' passar a ser o argumento a.pred (a = a.pred), então fica mul(3, fac(2)) e assim por diante
+// mul(2, fac(1))
+// mul(1, fac(0))
+
+// Equal
+eql(a: Nat, b: Nat): Bool // Given 2 numbers, it returns true if the 2 are the same and false if they are different.
+  case a b {
+    zero zero: Bool.true
+    // zero succ: Bool.false
+    // succ zero: Bool.false
+    succ succ: eql(a.pred, b.pred)
+  }default Bool.false
+//  ex4:_
+//  eql(13,2)
+
+// Do not use the "not" function to create the functions below
+
+// Greater than
+// 2 > 1 = True
+// 3 > 3 = False
+gtn(a: Nat, b: Nat): Bool // if A > B == True else false
+  // case a {
+  //   zero:
+  //     case b {
+  //       zero: Bool.false
+  //       succ: Bool.false
+  //     }
+  //   succ:
+  //     case b {
+  //       zero: Bool.true
+  //       succ: gtn(a.pred, b.pred)
+  //     }
+  // }
+  case a b {
+//    zero zero: Bool.false
+//    zero succ: Bool.false
+    succ zero: Bool.true
+    succ succ: gtn(a.pred,b.pred)
+  } default Bool.false
+  // ex4:_
+  // gtn(0,3)
+
+
+// Lower than
+// 1 < 2 = True
+// 3 < 3 = False
+ltn(a: Nat, b: Nat): Bool // if A > B == False else true
+  case a b {
+    //zero zero: Bool.false
+    zero succ: Bool.true
+    //succ zero: Bool.false
+    succ succ: ltn(a.pred, b.pred)
+  } default Bool.false
+
+  // case a {
+  //   zero:
+  //     case b {
+  //       zero: Bool.false
+  //       succ: Bool.true
+  //     }
+  //   succ:
+  //     case b {
+  //       zero: Bool.false
+  //       succ: ltn(a.pred, b.pred)
+  //     }
+  // }
+  // ex4:_
+  // ltn(1,7)
+
+
+// Minimum
+// min(2, 3) = 2
+// min(4, 1) = 1
+min(a: Nat, b: Nat): Nat // if A < B then A else B
+  case a {
+    zero: a
+    succ:
+      case b {
+        zero: b
+        succ: case ltn(a,b) {
+            true:  a
+            false: b
+          }
+      }
+  }
+  // ex4:_
+  // min(3,0)
+
+
+// Maximum
+// max(2, 3) = 3
+// max(4, 1) = 4
+max(a: Nat, b: Nat): Nat // if A > B then A else B
+  case a {
+    zero: b
+    succ:
+      case b {
+        zero: a
+        succ: case gtn(a,b) {
+            true:  a
+            false: b
+          }
+      }
+  }
+//  ex4:_
+//  max(0,1)
+
+
+// Divides a number by two
+// 2 / 2 = 1
+// 5 / 2 = 2
+// 1 / 2 = 0
+hlf(a: Nat): Nat
+  case a {
+    zero: Nat.zero
+    succ: case ltn(a,2) eql(a,2) gtn(a,2) {
+        true false false: Nat.zero
+        false true false: Nat.succ(Nat.zero)
+        false false true: Nat.succ(hlf(sub(a,2)))
+      } default Nat.zero
+    // sub(1,2) -> 0 //a < 2
+    // sub(2,2) -> 1 //a == 2
+    // sub(5,2) -> 3 -> sub(3,2) -> 1 //a > 2
+  }
+  // ex4:_
+  // hlf(3)
+
+// Division
+// 1 / 2 = 0
+// x / 0 = 0
+// 5 / 2 = 2
+div(a: Nat, b: Nat): Nat // division
+  case a b {
+    zero zero: Nat.zero
+    zero succ: Nat.zero
+    succ zero: Nat.zero
+    succ succ: case ltn(a,b) eql(a,b) gtn(a,b) {
+        true false false: Nat.zero
+        false true false: Nat.succ(Nat.zero)
+        false false true: Nat.succ(div(sub(a,b),b))
+      } default Nat.zero
+  }
+// 9/4 -> 5/4 -> 1/4
+  ex4:_
+  div(9,4)

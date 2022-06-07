@@ -1,0 +1,172 @@
+// Basic Exercises involving Bools
+
+type Bool {
+  true
+  false
+}
+
+// Is true
+// Returns true if input is true
+is_true(a: Bool): Bool
+a
+  //case a {
+  //  true: Bool.true
+  //  false: Bool.false
+  //}
+//  ex0:_
+//  is_true(false)
+
+// Is false
+// Returns true if input is false
+is_false(a: Bool): Bool
+  case a {
+    true: Bool.false
+    false: Bool.true
+  }
+//  ex0:_
+//  is_false(true)
+
+// Negation
+// Returns the opposite of a Bool
+neg(b: Bool): Bool
+  case b {
+    true: Bool.false
+    false: Bool.true
+  }
+//  ex0:_
+//  neg(true)
+
+// And
+// Returns true if both inputs are true
+and_v2(a: Bool, b: Bool): Bool
+  case a {
+    true: b
+    // se b também for true, então o retorno será true
+    // mas se b for false, então o retorno será false
+    // então achei melhor colocar pra retornar o valor de b
+    false: a // como a == false, não importa se o b é true ou false, o retorno da função deve ser false
+    // portanto, se a for false, o retorno deve ser o valor de a
+    // ou, só Bool.false mesmo kkkkkk
+  }
+  // 1 1  1
+  // 1 0  0
+  // 0 1  0
+  // 0 0  0
+//  ex0:_
+//  and_v2(true, true)
+
+// And
+// Returns true if both inputs are true
+// essa foi a primeira versão que eu fiz da função and
+and_v1(a: Bool, b: Bool): Bool
+  case a {
+    true:
+      case b {
+        true:  Bool.true
+        false: Bool.false
+      }
+    false: Bool.false
+  }
+//  ex0:_
+//  and_v1(true, false)
+
+// Or
+// Returs true if any input is true
+//0 0  0
+//0 1  1
+//1 0  1
+//1 1  1
+or(a: Bool, b: Bool): Bool
+  case a {
+    true:  a
+    false: b
+  }
+//  ex0:_
+//  or(false, false)
+
+
+// Equal
+// Returs true if both inputs are identical
+eql(a: Bool, b: Bool): Bool
+  case a {
+    true: b //retorna o valor de b
+      //case b{
+      //  true: Bool.true
+      //  false: Bool.false
+      //}
+    false: neg(b)
+      //case b {
+      //  true: a
+      //  false: neg(a)
+      //}
+  }
+//  ex0:_
+//  eql(false,true)
+
+
+// Xor
+// Returns true if both inputs are different
+// 1 1  0
+// 1 0  1
+// 0 1  1
+// 0 0  0
+xor(a: Bool, b: Bool): Bool
+  case a {
+    true: neg(b)
+      //case b {
+      //  true: Bool.false
+      //  false: Bool.true
+      //}
+    false: b
+      //case b {
+      //  true:  Bool.true
+      //  false: Bool.false
+      //}
+  }
+//  ex0:_
+//  xor(false, true)
+
+
+// Nor
+// Returns true if both inputs are false
+// 1 1  0
+// 1 0  0
+// 0 1  0
+// 0 0  1
+nor(a: Bool, b: Bool): Bool
+  case a {
+    true:  neg(a)
+    false: neg(b)
+  }
+//  ex0:_
+//  nor(false, true)
+
+
+// Nand
+// Returns false only if both inputs are true
+// 1 1  0
+// 1 0  1
+// 0 1  1
+// 0 0  1
+nand(a: Bool, b: Bool): Bool
+  case a {
+    true:  neg(b)
+    false: neg(a)
+  }
+//  ex0:_
+//  nand(false, false)
+
+
+// Xnor
+// Returns true if both inputs are identical
+// 1 1  1
+// 1 0  0
+// 0 1  0
+// 0 0  1
+xnor(a: Bool, b: Bool): Bool
+  case a {
+    true:  b
+    false: neg(b)
+  }
+  ex0:_
+  xnor(true, true)

@@ -1,0 +1,111 @@
+// type MaybeBool
+// It maybe holds a Boolean inside it
+type MaybeBool {
+  none //constante
+  some(value: Bool)
+}
+
+//construir valores de MaybeBool
+
+//tipo.construtor -> exemplo
+//MaybeBool.none -> vazio
+//MaybeBool.some(Bool.value) -> some guarda o valor pra usar depois
+
+//type Bool guarda nada
+
+// Returns true if Maybe is none
+is_none(a: MaybeBool): Bool
+  case a {
+    none: Bool.true
+    some: Bool.false
+  }
+//  ex1:_
+//  is_none(MaybeBool.some(false))
+//none -> is_none(MaybeBool.none)
+//some -> is_none(MaybeBool.some(Bool.value))
+
+// Returns true if Maybe is some
+is_some(a: MaybeBool): Bool
+  case a {
+    none: Bool.false
+    some: Bool.true
+  }
+//  ex1:_
+//  is_some(MaybeBool.none)
+
+// Returns true if both inputs are identical
+// eql(MaybeBool.none,             MaybeBool.none            ) -> true
+// eql(MaybeBool.some(Bool.false), MaybeBool.none            ) -> false
+// eql(MaybeBool.some(Bool.true),  MaybeBool.some(Bool.false)) -> false
+// eql(MaybeBool.some(Bool.false), MaybeBool.some(Bool.false)) -> true
+eql(a: MaybeBool, b: MaybeBool): Bool
+  case a {
+    none:
+      case b {
+        none: Bool.true
+        some: Bool.false
+      }
+    some:
+      case a.value {
+        true:
+          case b {
+            none: Bool.false
+            some:
+              case b.value {
+                true:  Bool.true
+                false: Bool.false
+              }
+          }
+        false:
+          case b {
+            none: Bool.false
+            some:
+              case b.value {
+                true:  Bool.false
+                false: Bool.true
+              }
+          }
+      }
+  }
+//  ex1:_
+//  eql(MaybeBool.some(Bool.true), MaybeBool.some(Bool.false))
+
+// Returns the value inside the MaybeBool.
+// If there is no value contained, returns v instead
+extract(a: MaybeBool, v: Bool): Bool
+  case a {
+    none: v
+    some: a.value //thx pela dica, tren
+      //case a.value {
+      //  true:  Bool.true
+      //  false: Bool.false
+      //}
+  }
+//  ex1:_
+//  extract(MaybeBool.some(Bool.true), Bool.false)
+
+// Create a MaybeBool from a Boolean
+// create(Bool.false) -> MaybeBool(Bool.false)
+create(a:Bool): MaybeBool
+  case a {
+    true:  MaybeBool.some(Bool.true)
+    false: MaybeBool.some(Bool.false)
+  }
+//  ex1:_
+//  create(Bool.false)
+
+// Returns the first input that is a MaybeBool.some
+// Returns MaybeBool.none if both are MaybeBool.none
+or(a: MaybeBool, b: MaybeBool) : MaybeBool
+  case a {
+    none:
+      case b {
+        none: MaybeBool.none
+        some: b
+      }
+    some: a
+  }
+  ex1:_
+  or(MaybeBool.some(Bool.true), MaybeBool.some(Bool.false))
+
+//agradecimento pelas dicas, tren
